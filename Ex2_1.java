@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class Ex2_1 {
 
@@ -51,14 +52,14 @@ public class Ex2_1 {
         }
         return count;
     }
+    volatile long  sum = 0;
 
-
-    public int getNumOfLinesThreads(String[] fileNames){
+    public long getNumOfLinesThreads(String[] fileNames){
         countingLinesThread [] threads = new countingLinesThread[fileNames.length];
-        int [] answers = new int [fileNames.length];
+
 
         for (int i = 0; i < fileNames.length; i++){
-            threads[i] = new countingLinesThread(fileNames[i],answers , i);
+            threads[i] = new countingLinesThread(fileNames[i],sum);
         }
         for (countingLinesThread countingLinesThread : threads) {
             countingLinesThread.start();
@@ -70,20 +71,17 @@ public class Ex2_1 {
                 System.err.println("exception in 'join' ");
             }
         }
-        int sum  = 0;
-        for (int answer : answers) {
-            sum += answer;
-        }
+
         return sum;
     }
-//
+
 //    public int getNumOfLinesThreadPool(String[] fileNames){
-//
+//        int numOfFiles = fileNames.length;
+//        ThreadPoolExecutor tp = new ThreadPoolExecutor();
 //    }
-//}
-
-
-
-
-
 }
+
+
+
+
+

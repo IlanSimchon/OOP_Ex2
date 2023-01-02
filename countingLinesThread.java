@@ -4,12 +4,12 @@ import java.util.Scanner;
 
 public class countingLinesThread extends Thread{
     private String fileName;
-    private int[] ans;
-    private int index;
-    countingLinesThread(String fileName, int [] ans , int index){
+    private long sum;
+
+    countingLinesThread(String fileName, long sum){
         this.fileName = fileName;
-        this.ans = ans;
-        this.index = index;
+        this.sum = sum;
+
 
     }
     @Override
@@ -23,7 +23,7 @@ public class countingLinesThread extends Thread{
                 counter++;
             }
             sc.close();
-            ans[index] = counter;
+            sum += counter;
         } catch (FileNotFoundException e) {
             System.err.println("could not open file: " + fileName);
         }
