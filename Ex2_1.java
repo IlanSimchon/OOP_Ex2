@@ -53,13 +53,37 @@ public class Ex2_1 {
     }
 
 
-//    public int getNumOfLinesThreads(String[] fileNames){
-//
-//    }
+    public int getNumOfLinesThreads(String[] fileNames){
+        countingLinesThread [] threads = new countingLinesThread[fileNames.length];
+        int [] answers = new int [fileNames.length];
+
+        for (int i = 0; i < fileNames.length; i++){
+            threads[i] = new countingLinesThread(fileNames[i],answers , i);
+        }
+        for (countingLinesThread countingLinesThread : threads) {
+            countingLinesThread.start();
+        }
+        for (countingLinesThread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                System.err.println("exception in 'join' ");
+            }
+        }
+        int sum  = 0;
+        for (int answer : answers) {
+            sum += answer;
+        }
+        return sum;
+    }
 //
 //    public int getNumOfLinesThreadPool(String[] fileNames){
 //
 //    }
 //}
+
+
+
+
 
 }
