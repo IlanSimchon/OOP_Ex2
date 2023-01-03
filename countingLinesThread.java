@@ -6,11 +6,9 @@ public class countingLinesThread extends Thread{
     private String fileName;
     private long sum;
 
-    countingLinesThread(String fileName, long sum){
+    countingLinesThread(String fileName, int sum){
         this.fileName = fileName;
         this.sum = sum;
-
-
     }
     @Override
     public void run() {

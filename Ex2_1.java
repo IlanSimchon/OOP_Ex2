@@ -2,6 +2,8 @@ import java.io.*;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Ex2_1 {
 
@@ -26,7 +28,8 @@ public class Ex2_1 {
 
                 names[i] = ("file_" + i + ".txt"); // send the name to array
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.err.println("error while crateing file: " + names[i]);
+                e.printStackTrace();
             }
 
         }
@@ -48,11 +51,12 @@ public class Ex2_1 {
                 sc.close();
             } catch (FileNotFoundException ex) {
                 System.err.println(ex.getMessage());
+                ex.printStackTrace();
             }
         }
         return count;
     }
-    volatile long  sum = 0;
+  //  volatile long []  sum = new long [1];
 
     public long getNumOfLinesThreads(String[] fileNames){
         countingLinesThread [] threads = new countingLinesThread[fileNames.length];
@@ -63,22 +67,23 @@ public class Ex2_1 {
         }
         for (countingLinesThread countingLinesThread : threads) {
             countingLinesThread.start();
+
         }
         for (countingLinesThread thread : threads) {
             try {
                 thread.join();
             } catch (InterruptedException e) {
                 System.err.println("exception in 'join' ");
+                e.printStackTrace();
             }
         }
-
         return sum;
     }
 
-//    public int getNumOfLinesThreadPool(String[] fileNames){
-//        int numOfFiles = fileNames.length;
-//        ThreadPoolExecutor tp = new ThreadPoolExecutor();
-//    }
+    public int getNumOfLinesThreadPool(String[] fileNames){
+        int numOfFiles = fileNames.length;
+
+    }
 }
 
 
