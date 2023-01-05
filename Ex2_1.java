@@ -78,7 +78,6 @@ public void remove(int capcitiy) throws IOException {
         }
         for (countingLinesThread countingLinesThread : threads) {
             countingLinesThread.start();
-
         }
         for (countingLinesThread thread : threads) {
             try {

@@ -1,41 +1,46 @@
 import java.util.concurrent.Callable;
 
-public class Task<T> implements Comparable < Task<T> > , Runnable {
+public class Task<T> implements Comparable<Task<T>>, Runnable {
     private final Callable<T> callable;
     private final TaskType type;
-    private T result;
-    private Exception exception;
 
     public Task(Callable<T> callable, TaskType type) {
         this.callable = callable;
         this.type = type;
     }
 
-    public static <V> Task<V> of(Callable<V> callable) {
+    public static <V> Task<V> Factory(Callable<V> callable) {
         return new Task<>(callable, TaskType.OTHER);
     }
 
-    public static <V> Task<V> of(Callable<V> callable, TaskType type) {
+    public static <V> Task<V> Factory(Callable<V> callable, TaskType type) {
         return new Task<>(callable, type);
     }
 
-    public T getResult() throws Exception {
-        if (exception != null) {
-            throw exception;
+    public T call() throws Exception {
+        try {
+            return callable.call();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.err.println(ex.getMessage());
         }
-        return result;
+        return null;
     }
+    public void run(){
+        try {
+            this.call();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public TaskType getType() {
         return type;
     }
 
-    public void run() {
-        try {
-            result = callable.call();
-        } catch (Exception e) {
-            exception = e;
-        }
+    public Callable<T> getCallable() {
+        return callable;
     }
 
     @Override
