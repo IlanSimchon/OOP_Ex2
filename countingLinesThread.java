@@ -2,13 +2,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class countingLinesThread extends Thread{
+public class countingLinesThread extends Thread {
     private String fileName;
-    private long sum;
+    private int sum;
 
-    countingLinesThread(String fileName, int sum){
+    countingLinesThread(String fileName){
         this.fileName = fileName;
-        this.sum = sum;
+        this.sum = 0;
     }
     @Override
     public void run() {
@@ -25,5 +25,9 @@ public class countingLinesThread extends Thread{
         } catch (FileNotFoundException e) {
             System.err.println("could not open file: " + fileName);
         }
+    }
+
+    public int getSum() {
+        return sum;
     }
 }
