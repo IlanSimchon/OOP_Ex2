@@ -1,23 +1,25 @@
 import java.util.concurrent.Callable;
 
-public class Task<T> implements Comparable<Task<T>>, Runnable {
+public class Task<T> implements Comparable<Task<T>> , Callable<T>{
     private final Callable<T> callable;
     private final TaskType type;
+    //private T answer;
 
-    public Task(Callable<T> callable, TaskType type) {
+    private Task(Callable<T> callable, TaskType type) {
         this.callable = callable;
         this.type = type;
+        //answer = null;
     }
 
-    public static <V> Task<V> Factory(Callable<V> callable) {
+    public static <V> Task<V> createTask(Callable<V> callable) {
         return new Task<>(callable, TaskType.OTHER);
     }
 
-    public static <V> Task<V> Factory(Callable<V> callable, TaskType type) {
+    public static <V> Task<V> createTask(Callable<V> callable, TaskType type) {
         return new Task<>(callable, type);
     }
 
-    public T call() throws Exception {
+    public T call() {
         try {
             return callable.call();
         } catch (Exception ex) {
@@ -26,13 +28,14 @@ public class Task<T> implements Comparable<Task<T>>, Runnable {
         }
         return null;
     }
-    public void run(){
-        try {
-            this.call();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+
+//    public void run(){
+//        try {
+//            answer = this.call();
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
 
     public TaskType getType() {
@@ -48,5 +51,9 @@ public class Task<T> implements Comparable<Task<T>>, Runnable {
         return Integer.compare(type.getPriorityValue(), other.getType().getPriorityValue());
     }
 
+//    public T getAnswer() {
+//        return answer;
+//
+//    }
 }
 

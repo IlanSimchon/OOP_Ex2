@@ -10,6 +10,7 @@ public class countingLinesThread extends Thread {
         this.fileName = fileName;
         this.sum = 0;
     }
+    
     @Override
     public void run() {
         File file = new File(fileName);

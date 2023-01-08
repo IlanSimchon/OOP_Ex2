@@ -6,16 +6,20 @@ import java.util.concurrent.*;
 public class Ex2_1 {
 
     public static void main(String[] args) throws FileNotFoundException, ExecutionException, InterruptedException {
-        String[] files = createTextFiles(3000, 7, 99999);
+        int n = 30;
+        String[] files = createTextFiles(n, 7, 99999);
         System.out.println(getNumOfLines(files));
         System.out.println(getNumOfLinesThreads(files));
         System.out.println(getNumOfLinesThreadPool(files));
+
+        remove(n);
     }
 
-public void remove(int capcitiy) throws IOException {
+public static void remove(int capcitiy)  {
     for (int i = 0; i < capcitiy; i++) {
-        FileWriter writeFile = new FileWriter("file_" + i + ".txt");
-        PrintWriter outs = new PrintWriter(writeFile);
+        File file = new File("file_" + i + ".txt");
+        file.delete();
+
     }
 }
     public static String[] createTextFiles(int n, int seed, int bound) {
