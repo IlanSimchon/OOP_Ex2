@@ -19,10 +19,10 @@ public class Tests {
             }
             return sum;
         }, TaskType.COMPUTATIONAL);
-        var sumTask = customExecutor.submit(task);
+        var sumTask = customExecutor.submit((Callable) task);
         final int sum;
         try {
-            sum = (int) sumTask.get(1, TimeUnit.MILLISECONDS);
+            sum = (int) sumTask.get(400, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             throw new RuntimeException(e);
         }
@@ -47,15 +47,19 @@ public class Tests {
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
-        for (int i = 0; i < 2; i++) {
+        for(int i = 1; i< 100; i++) {
             customExecutor.submit(() -> {
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+                return 1000 * Math.pow(1.021, 5);
             });
         }
+        customExecutor.submit(() -> {
+            return 1000 * Math.pow(1.022, 5);
+        });
+
+
+
+
+
 
         logger.info(() -> "Reversed String = " + reversed);
         logger.info(() -> String.valueOf("Total Price = " + totalPrice));

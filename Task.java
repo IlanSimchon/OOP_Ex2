@@ -1,14 +1,13 @@
 import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 
-public class Task<T> implements Comparable<Task<T>> , Callable<T>{
+public class Task<T>   implements Comparable<Task<T>> , Callable<T> {
     private final Callable<T> callable;
     private final TaskType type;
-    //private T answer;
 
     private Task(Callable<T> callable, TaskType type) {
         this.callable = callable;
         this.type = type;
-        //answer = null;
     }
 
     public static <V> Task<V> createTask(Callable<V> callable) {
@@ -30,14 +29,6 @@ public class Task<T> implements Comparable<Task<T>> , Callable<T>{
         return null;
     }
 
-//    public void run(){
-//        try {
-//            answer = this.call();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
 
     public TaskType getType() {
         return type;
@@ -52,9 +43,5 @@ public class Task<T> implements Comparable<Task<T>> , Callable<T>{
         return Integer.compare(type.getPriorityValue(), other.getType().getPriorityValue());
     }
 
-//    public T getAnswer() {
-//        return answer;
-//
-//    }
 }
 
