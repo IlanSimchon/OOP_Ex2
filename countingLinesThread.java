@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+
 public class countingLinesThread extends Thread {
     private String fileName;
     private int sum;

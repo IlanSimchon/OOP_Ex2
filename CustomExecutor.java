@@ -17,6 +17,8 @@ public class  CustomExecutor <T> extends ThreadPoolExecutor {
     count = new int[4];
     }
 
+
+
 //    public Future<T> submit(Task<T> task) {
 //        if(isActive) {
 //            count[task.getType().getPriorityValue()] ++;

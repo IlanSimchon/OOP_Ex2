@@ -95,7 +95,10 @@ public static void remove(int capcitiy)  {
         long currentTime = System.currentTimeMillis();
         System.out.println("The time with Threads is: " + (currentTime - startingTime) + " ms");
         return count;
+
     }
+
+
 
     public static int getNumOfLinesThreadPool(String[] fileNames) throws ExecutionException, InterruptedException {
         long startingTime = System.currentTimeMillis();

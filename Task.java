@@ -20,6 +20,7 @@ public class Task<T> implements Comparable<Task<T>> , Callable<T>{
     }
 
     public T call() {
+
         try {
             return callable.call();
         } catch (Exception ex) {
