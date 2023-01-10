@@ -1,13 +1,59 @@
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
 
 import java.util.concurrent.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class Tests {
     public static final Logger logger = LoggerFactory.getLogger(Tests.class);
+
+    @Test
+    void TaskType() {
+        TaskType tt1 = TaskType.IO;
+        assertEquals(2, tt1.getPriorityValue());
+        tt1.setPriority(5);
+        assertEquals(5, tt1.getPriorityValue());
+    }
+
+    @Test
+    void CustomExecutor() {
+        Task<Integer> task1 = Task.createTask(() -> {
+            Thread.sleep(1000);
+            return 1;
+        }, TaskType.COMPUTATIONAL);
+        Task<Integer> task2 = Task.createTask(() -> {
+            Thread.sleep(1000);
+            return 1;
+        }, TaskType.IO);
+        Task<Integer> task3 = Task.createTask(() -> {
+            Thread.sleep(1000);
+            return 1;
+        }, TaskType.OTHER);
+        CustomExecutor<Integer> customExecutor = new CustomExecutor<>();
+        customExecutor.submit(task3);
+        customExecutor.submit(task2);
+        assertEquals(2, customExecutor.getCurrentMax());
+        Future<Integer> f3 = customExecutor.submit(task3);
+        Future<Integer> f2 = customExecutor.submit(task2);
+        Future<Integer> f1 = customExecutor.submit(task1);
+        assertEquals(1, customExecutor.getCurrentMax());
+        int answer = 0;
+        try {
+            answer = f1.get() + f2.get() + f3.get();
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+        assertEquals(3, answer);
+
+    }
+
 
     @Test
     public void partialTest() {
@@ -47,7 +93,7 @@ public class Tests {
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
-        for(int i = 1; i< 50; i++) {
+        for (int i = 1; i < 50; i++) {
             customExecutor.submit(() -> {
                 Thread.sleep(1000);
                 return 1000 * Math.pow(1.021, 5);
@@ -57,10 +103,6 @@ public class Tests {
 //        customExecutor.submit(() -> {
 //            return 1000 * Math.pow(1.022, 5);
 //        },TaskType.OTHER);
-
-
-
-
 
 
         logger.info(() -> "Reversed String = " + reversed);
