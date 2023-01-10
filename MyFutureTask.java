@@ -52,4 +52,11 @@ public class MyFutureTask<T> extends FutureTask implements Runnable ,Comparable<
         return task.compareTo(m.getTask());
     }
 
+    /**
+     *  set the Task to the input Task
+     * @param task
+     */
+    public void setTask(Task<T> task) {
+        this.task = task;
+    }
 }

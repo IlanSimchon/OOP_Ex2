@@ -67,12 +67,12 @@ public class Tests {
                 return "|";
             }
         };
-        Task<String> t2 = Task.createTask(callable2,TaskType.IO);
-        Task<String> t3 = Task.createTask(callable2,TaskType.COMPUTATIONAL);
-        Task<String> t4 = Task.createTask(callable2,TaskType.OTHER);
-        assertEquals(0,t1.compareTo(t2));
-        assertEquals(1,t2.compareTo(t4));
-        assertEquals(-1,t2.compareTo(t3));
+        Task<String> t6 = Task.createTask(callable2,TaskType.IO);
+        Task<String> t7 = Task.createTask(callable2,TaskType.COMPUTATIONAL);
+        Task<String> t8 = Task.createTask(callable2,TaskType.OTHER);
+        assertEquals(0,t1.compareTo(t6));
+        assertEquals(1,t7.compareTo(t8));
+        assertEquals(-1,t6.compareTo(t7));
 
     }
     @Test
@@ -92,6 +92,7 @@ public class Tests {
         assertNotNull(customExecutor.submit(callable,TaskType.COMPUTATIONAL));
         assertEquals(3,customExecutor.getActiveCount());
         assertNull(customExecutor.submit((Task<String>) null));
+        assertNull(customExecutor.submit((Callable<String>) null,TaskType.IO));
 
     }
 
@@ -110,14 +111,18 @@ public class Tests {
             return 1;
         }, TaskType.OTHER);
         CustomExecutor<Integer> customExecutor = new CustomExecutor<>();
+        for(int i = 0; i< 18;i++){
+            customExecutor.submit(task3);
+        }
+        assertEquals(3, customExecutor.getCurrentMax());
         customExecutor.submit(task3);
         customExecutor.submit(task2);
         assertEquals(2, customExecutor.getCurrentMax());
         customExecutor.submit(task3);
         customExecutor.submit(task2);
+
         customExecutor.submit(task1);
         assertEquals(1, customExecutor.getCurrentMax());
-
 
     }
 
@@ -172,62 +177,5 @@ public class Tests {
         assertEquals(true,customExecutor.isTerminated());
     }
 
-
-    @Test
-    public void partialTest() {
-        CustomExecutor customExecutor = new CustomExecutor();
-        var task = Task.createTask(() -> {
-            int sum = 0;
-            for (int i = 1; i <= 10; i++) {
-                sum += i;
-            }
-            return sum;
-        }, TaskType.COMPUTATIONAL);
-//        var sumTask = customExecutor.submit((Callable) task);
-//        final int sum;
-//        try {
-//            sum = (int) sumTask.get(400, TimeUnit.MILLISECONDS);
-//        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//            throw new RuntimeException(e);
-//        }
-//        logger.info(() -> "Sum of 1 through 10 = " + sum);
-//        Callable<Double> callable1 = () -> {
-//            return 1000 * Math.pow(1.02, 5);
-//        };
-        Callable<String> callable2 = () -> {
-            StringBuilder sb = new StringBuilder("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-            return sb.reverse().toString();
-        };
-        // var is used to infer the declared type automatically
-        var priceTask = customExecutor.submit(() -> {
-            return 1000 * Math.pow(1.02, 5);
-        }, TaskType.IO);
-        var reverseTask = customExecutor.submit(callable2, TaskType.IO);
-        final Double totalPrice;
-        final String reversed;
-        try {
-            totalPrice = (Double) priceTask.get();
-            reversed = (String) reverseTask.get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-        for (int i = 1; i < 50; i++) {
-            customExecutor.submit(() -> {
-                Thread.sleep(1000);
-                return 1000 * Math.pow(1.021, 5);
-            }, TaskType.IO);
-        }
-        TaskType tt = TaskType.COMPUTATIONAL;
-//        customExecutor.submit(() -> {
-//            return 1000 * Math.pow(1.022, 5);
-//        },TaskType.OTHER);
-
-
-        logger.info(() -> "Reversed String = " + reversed);
-        logger.info(() -> String.valueOf("Total Price = " + totalPrice));
-        logger.info(() -> "Current maximum priority = " +
-                customExecutor.getCurrentMax());
-        customExecutor.gracefullyTerminate();
-    }
 }
 

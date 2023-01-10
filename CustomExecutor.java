@@ -14,8 +14,17 @@ public class CustomExecutor<T> extends ThreadPoolExecutor {
      count[i] tracks the number of tasks submitted with priority i
      */
     private int[] count;
-    /**
 
+    /**
+     *
+     * @return True if the threadPool is not Terminated
+     */
+    public boolean isActive() {
+        return isActive;
+    }
+
+
+    /**
      Initializes a new CustomExecutor with the following parameters:
      Core pool size: half of the available processors
      Maximum pool size: the number of available processors minus 1
@@ -36,8 +45,8 @@ public class CustomExecutor<T> extends ThreadPoolExecutor {
             count[i] = 0;
         }
     }
-    /**
 
+    /**
      Submits a new task with a given priority
      @param callable the callable task to execute
      @param type the type of task, used to determine its priority
@@ -52,7 +61,6 @@ public class CustomExecutor<T> extends ThreadPoolExecutor {
     }
 
     /**
-
      Submits a new task with the priority determined by its type
      @param task the task to execute
      @return a Future representing the task
@@ -69,7 +77,6 @@ public class CustomExecutor<T> extends ThreadPoolExecutor {
     }
 
     /**
-
      Submits a new task with default priority
      @param callable the callable task to execute
      @return a Future representing the task
@@ -96,7 +103,7 @@ public class CustomExecutor<T> extends ThreadPoolExecutor {
 
 
     @Override
-    protected void afterExecute(Runnable r, Throwable t) {
+    protected void beforeExecute(Thread t, Runnable r) {
         for (int i = 1; i < count.length; i++) {
             if (count[i] > 0) {
                 count[i]--;
