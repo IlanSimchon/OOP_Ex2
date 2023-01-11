@@ -68,7 +68,6 @@ public class CustomExecutor<T> extends ThreadPoolExecutor {
     public Future<T> submit(Task<T> task) {
         if (task != null && isActive) {
             count[task.getType().getPriorityValue()]++;
-            MyFutureTask myFutureTask = new MyFutureTask(task);
             MyFutureTask<T> ftask = new MyFutureTask(task);
             super.execute(ftask);
             return ftask;
@@ -121,8 +120,10 @@ public class CustomExecutor<T> extends ThreadPoolExecutor {
             isActive = false;
             super.shutdown();
             try {
-                if(!super.awaitTermination(300L *(getQueue().size()) , TimeUnit.MILLISECONDS)){
-                    super.awaitTermination(300L *(getQueue().size() + 4) , TimeUnit.MILLISECONDS);
+                if(!super.awaitTermination(100L *(getQueue().size()) , TimeUnit.MILLISECONDS)){
+                    if(!super.awaitTermination(300L *(getQueue().size() ) , TimeUnit.MILLISECONDS)){
+                        System.out.println("some tasks did not complete )=");
+                    }
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();

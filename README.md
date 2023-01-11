@@ -48,4 +48,11 @@ In creating the task class, we used a Factory design pattern (defining the const
 - Adapter
 To be able to know at any given moment what the maximum priority is, we would like to monitor a function that is activated when a thread becomes free and a new task enters execution, and every time this function is activated to update what the maximum priority is currently in the queue, however, to do this we need to convert our task to the FutureTask type and therefore We had to use an Adapter design template that serves as an adapter between our Task and the FutureTask that is sent as a parameter to the execute function
 
+## uml Diagram
+![תמונה של WhatsApp‏ 2023-01-09 בשעה 18 32 35](https://user-images.githubusercontent.com/98847692/211846823-b823bb3e-9488-4ae5-8d27-284acd0cabc3.jpg)
+
+
 ## Thanks for reading!
+
+
+

@@ -29,6 +29,7 @@ public class Tests {
         Task<String> t2 = Task.createTask(callable,TaskType.IO);
         assertEquals(3,t1.getType().getPriorityValue());
         assertEquals(2,t2.getType().getPriorityValue());
+        assertEquals("| abcd |",t1.call());
     }
     @Test
     void Task_call(){
@@ -120,10 +121,8 @@ public class Tests {
         assertEquals(2, customExecutor.getCurrentMax());
         customExecutor.submit(task3);
         customExecutor.submit(task2);
-
         customExecutor.submit(task1);
         assertEquals(1, customExecutor.getCurrentMax());
-
     }
 
     @Test
@@ -163,11 +162,11 @@ public class Tests {
             return 1;
         }, TaskType.COMPUTATIONAL);
         CustomExecutor<Integer> customExecutor = new CustomExecutor<>();
-        for(int i = 0; i< 50; i++){
+        for(int i = 0; i < 50; i++){
             customExecutor.submit(task1);
         }
         customExecutor.gracefullyTerminate();
-        customExecutor.submit(task1);
+        assertDoesNotThrow( ()-> customExecutor.submit(task1));
         try {
             Thread.sleep(20000);
         } catch (InterruptedException e) {
