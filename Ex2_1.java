@@ -6,17 +6,17 @@ import java.util.concurrent.*;
 public class Ex2_1 {
 
     public static void main(String[] args) throws FileNotFoundException, ExecutionException, InterruptedException {
-        int n = 30;
+        int n = 10000;
         String[] files = createTextFiles(n, 7, 99999);
-        System.out.println(getNumOfLines(files));
-        System.out.println(getNumOfLinesThreads(files));
-        System.out.println(getNumOfLinesThreadPool(files));
+        System.out.println("Total " + getNumOfLines(files) + " lines");
+        System.out.println("Total " + getNumOfLinesThreads(files)+ " lines");
+        System.out.println("Total " + getNumOfLinesThreadPool(files)+ " lines");
 
         remove(n);
     }
 
-public static void remove(int capcitiy)  {
-    for (int i = 0; i < capcitiy; i++) {
+public static void remove(int capacity)  {
+    for (int i = 0; i < capacity; i++) {
         File file = new File("file_" + i + ".txt");
         file.delete();
 
@@ -67,7 +67,7 @@ public static void remove(int capcitiy)  {
         }
 
         long currentTime = System.currentTimeMillis();
-        System.out.println("The time without thread is: " + (currentTime - startingTime) + " ms");
+        System.out.println("The time without using thread is: " + (currentTime - startingTime)/1000 + " Seconds");
         return count;
     }
 
@@ -93,7 +93,7 @@ public static void remove(int capcitiy)  {
             count += thread.getSum();
         }
         long currentTime = System.currentTimeMillis();
-        System.out.println("The time with Threads is: " + (currentTime - startingTime) + " ms");
+        System.out.println("The time using Threads is: " + (currentTime - startingTime)/1000 + " Seconds");
         return count;
 
     }
@@ -104,7 +104,7 @@ public static void remove(int capcitiy)  {
         long startingTime = System.currentTimeMillis();
         int numOfFiles = fileNames.length;
         int count = 0;
-        myCallable[] threads = new myCallable[fileNames.length];
+        myCallable[] threads = new myCallable[numOfFiles];
         for (int i = 0; i < numOfFiles; i++) {
             threads[i] = new myCallable(fileNames[i]);
         }
@@ -116,7 +116,7 @@ public static void remove(int capcitiy)  {
        executorService.shutdown();
 
             long currentTime = System.currentTimeMillis();
-            System.out.println("The time with Threadpool is: " + (currentTime - startingTime) + " ms");
+            System.out.println("The time using Threadpool is: " + (currentTime - startingTime)/1000 + " Seconds");
             return count;
     }
 }
