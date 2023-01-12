@@ -94,6 +94,7 @@ public class Tests {
         assertEquals(3,customExecutor.getActiveCount());
         assertNull(customExecutor.submit((Task<String>) null));
         assertNull(customExecutor.submit((Callable<String>) null,TaskType.IO));
+        customExecutor.shutdown();
 
     }
 
@@ -123,6 +124,7 @@ public class Tests {
         customExecutor.submit(task2);
         customExecutor.submit(task1);
         assertEquals(1, customExecutor.getCurrentMax());
+        customExecutor.shutdown();
     }
 
     @Test
@@ -153,6 +155,7 @@ public class Tests {
             throw new RuntimeException(e);
         }
         assertEquals(3, answer);
+        customExecutor.shutdown();
     }
 
     @Test
@@ -174,6 +177,7 @@ public class Tests {
         }
         assertEquals(50,customExecutor.getCompletedTaskCount());
         assertEquals(true,customExecutor.isTerminated());
+        customExecutor.shutdown();
     }
 
 }
