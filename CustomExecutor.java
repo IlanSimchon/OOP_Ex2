@@ -13,7 +13,7 @@ public class CustomExecutor<T> extends ThreadPoolExecutor {
 
      count[i] tracks the number of tasks submitted with priority i
      */
-    private int[] count;
+    private final int[] count;
 
     /**
      *
@@ -67,7 +67,9 @@ public class CustomExecutor<T> extends ThreadPoolExecutor {
      */
     public Future<T> submit(Task<T> task) {
         if (task != null && isActive) {
-            count[task.getType().getPriorityValue()]++;
+            synchronized (count) {
+                count[task.getType().getPriorityValue()]++;
+            }
             MyFutureTask<T> ftask = new MyFutureTask(task);
             super.execute(ftask);
             return ftask;
@@ -103,9 +105,11 @@ public class CustomExecutor<T> extends ThreadPoolExecutor {
 
     @Override
     protected void beforeExecute(Thread t, Runnable r) {
-        for (int i = 1; i < count.length; i++) {
-            if (count[i] > 0) {
-                count[i]--;
+        synchronized (count) {
+            for (int i = 1; i < count.length; i++) {
+                if (count[i] > 0) {
+                    count[i]--;
+                }
             }
         }
     }
